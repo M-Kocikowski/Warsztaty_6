@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tweets")
@@ -20,6 +21,9 @@ public class Tweet {
     @NotEmpty
     @Size(min = 10, max = 1000)
     private String text;
+
+    @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
     private LocalDateTime created;
 
@@ -49,5 +53,13 @@ public class Tweet {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
