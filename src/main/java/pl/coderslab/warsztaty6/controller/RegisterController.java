@@ -6,36 +6,36 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.warsztaty6.entity.User;
-import pl.coderslab.warsztaty6.repository.UserRepo;
+import pl.coderslab.warsztaty6.repository.UserRepository;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/register")
-@SessionAttributes("user")
+@SessionAttributes("appUser")
 public class RegisterController {
 
-    private UserRepo userRepo;
+    private UserRepository userRepository;
 
-    public RegisterController(UserRepo userRepo) {
-        this.userRepo = userRepo;
+    public RegisterController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @GetMapping
     public String getRegister(Model model){
-        model.addAttribute("user", new User());
+        model.addAttribute("appUser", new User());
         return "register";
     }
 
     @PostMapping
-    public String postMapping(@ModelAttribute("user") @Valid User user, BindingResult result, Model model){
+    public String postMapping(@ModelAttribute("appUser") @Valid User user, BindingResult result, Model model){
         if (result.hasErrors()){
             return "register";
         }
         else{
             user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-            userRepo.save(user);
-            model.addAttribute("user", user);
+            userRepository.save(user);
+            model.addAttribute("appUser", user);
             return "redirect:/";
         }
     }

@@ -8,23 +8,24 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import pl.coderslab.warsztaty6.entity.User;
-import pl.coderslab.warsztaty6.repository.UserRepo;
+import pl.coderslab.warsztaty6.repository.UserRepository;
 import pl.coderslab.warsztaty6.validation.LoginValidationGroup;
 
 @Controller
-@SessionAttributes("user")
+@SessionAttributes("appUser")
 public class LoginController {
 
-    private UserRepo userRepo;
+    private UserRepository userRepository;
 
-    public LoginController(UserRepo userRepo) {
-        this.userRepo = userRepo;
+    public LoginController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/login")
     public String getLogin(Model model){
-        model.addAttribute("user", new User());
+        model.addAttribute("appUser", new User());
         return "login";
     }
 
@@ -33,13 +34,19 @@ public class LoginController {
         if (result.hasErrors() || !isAuthorized(user)){
             return "login";
         }
-        User user1 = userRepo.findFirstByEmail(user.getEmail());
-        model.addAttribute("user", user1);
+        User user1 = userRepository.findFirstByEmail(user.getEmail());
+        model.addAttribute("appUser", user1);
+        return "redirect:/";
+    }
+
+    @GetMapping("/app/logout")
+    public String getLogout(SessionStatus status){
+        status.setComplete();
         return "redirect:/";
     }
 
     private boolean isAuthorized(User user) {
-        User firstByEmail = userRepo.findFirstByEmail(user.getEmail());
+        User firstByEmail = userRepository.findFirstByEmail(user.getEmail());
         if (firstByEmail == null){
             return false;
         }

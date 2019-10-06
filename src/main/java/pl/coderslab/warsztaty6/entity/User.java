@@ -9,6 +9,7 @@ import pl.coderslab.warsztaty6.validation.LoginValidationGroup;
 
 import javax.persistence.*;
 import javax.validation.groups.Default;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -32,6 +33,9 @@ public class User {
 
     @NotEmpty(groups = {LoginValidationGroup.class, Default.class})
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Tweet> tweets;
 
     public long getId() {
         return id;
@@ -69,4 +73,16 @@ public class User {
         this.password = password;
     }
 
+    public List<Tweet> getTweets() {
+        return tweets;
+    }
+
+    public void setTweets(List<Tweet> tweets) {
+        this.tweets = tweets;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }
