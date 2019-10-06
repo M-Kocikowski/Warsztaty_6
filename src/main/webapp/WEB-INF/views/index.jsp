@@ -17,7 +17,8 @@
 <div style="margin: 20px 30%">
 <form:form method="post" modelAttribute="newTweet">
     <form:textarea path="text" rows="10" cols="70"/>
-    <br><br>
+    <br><form:errors path="text"/>
+    <br>
     <input type="submit" value="Post New Tweet">
 </form:form>
 </div>

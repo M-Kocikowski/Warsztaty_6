@@ -1,6 +1,9 @@
 package pl.coderslab.warsztaty6.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,6 +17,8 @@ public class Tweet {
     @ManyToOne
     private User user;
 
+    @NotEmpty
+    @Size(min = 10, max = 1000)
     private String text;
 
     private LocalDateTime created;
